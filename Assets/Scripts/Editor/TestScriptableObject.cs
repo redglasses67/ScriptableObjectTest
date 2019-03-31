@@ -6,22 +6,24 @@ using System.Collections.Generic;
 public class TestScriptableObject : ScriptableObject
 {
     [System.Serializable]
-    public class SubData
+    public class ObjectData
     {
-        public string SubName = "";
-        public float SubValue = 0;
+        public string  ObjectName      = "";
+        public Vector3 ObjectTranslate = Vector3.zero;
+        public Vector3 ObjectRotate    = Vector3.zero;
+        public Vector3 ObjectScale     = Vector3.one;
     }
 
-    public string BaseName = "";
-    public SubData[] SubDataArray;
+    public string MayaSceneName = "";
+    public ObjectData[] ObjectDataArray;
 
 
-    [MenuItem ("Tools/Create ExampleAsset Instance")]
+    [MenuItem ("Tools/Create TestScriptableObject Sample")]
     static void CreateExampleAssetInstance ()
     {
-        var exampleAsset = CreateInstance<TestScriptableObject>();
+        var sampleAsset = CreateInstance<TestScriptableObject>();
 
-        AssetDatabase.CreateAsset (exampleAsset, "Assets/ExampleTestScriptableObject.asset");
-        AssetDatabase.Refresh ();
+        AssetDatabase.CreateAsset(sampleAsset, "Assets/TestScriptableObject_Sample.asset");
+        AssetDatabase.Refresh();
     }
 }

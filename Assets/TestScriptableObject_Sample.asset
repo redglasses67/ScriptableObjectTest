@@ -9,9 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a30cfb80facb48f47ae8be5284764ab5, type: 3}
-  m_Name: ExampleTestScriptableObject
+  m_Name: TestScriptableObject_Sample
   m_EditorClassIdentifier: 
-  BaseName: opopop
-  SubDataArray:
-  - SubName: aa
-    SubValue: 16
+  MayaSceneName: 
+  ObjectDataArray: []

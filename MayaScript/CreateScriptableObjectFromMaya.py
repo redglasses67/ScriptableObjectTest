@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 import maya.cmds as mc
+import os
 import os.path as op
 import yaml
 
@@ -21,7 +22,7 @@ def removeUnityTagAlias(filepath):
         else:
             result += line
 
-    sourceFile.close()  
+    sourceFile.close()
 
     return header, result
 
@@ -34,9 +35,18 @@ print('curFileName:     ', curFileName)
 thisFilePath = op.dirname(__file__)
 print('thisFilePath:     ', thisFilePath)
 
-testFilePath = op.join(thisFilePath, "ExampleTestScriptableObject.asset")
+# thisFilePath にディレクトリを移動
+os.chdir(thisFilePath)
+# さらに１つ上の階層に移動
+os.chdir("..")
+# 現在はどこ？
+parentFolderPath = os.getcwd()
+print("parentFolderPath : ", parentFolderPath )
 
-UnityStreamHeader, UnityStreamNoTags = removeUnityTagAlias(testFilePath)
+exportUnityPath = op.join(parentFolderPath, "Assets")
+sampleFilePath  = op.join(exportUnityPath, "TestScriptableObject_Sample.asset")
+
+UnityStreamHeader, UnityStreamNoTags = removeUnityTagAlias(sampleFilePath)
 
 print("UnityStreamHeader ============================================")
 print(UnityStreamHeader)
@@ -46,14 +56,13 @@ print("UnityStreamNoTags ============================================")
 print(UnityStreamNoTags)
 print("==============================================================")
 
-exportUnityPath = "E:\works\ScriptableObjectTest\Assets"
 exportScriptableObjectPath = op.join(exportUnityPath, "TestScriptableObject_" + curFileName + ".asset")
 
-hoge = yaml.safe_load(UnityStreamNoTags)
-print(hoge)
+loadedScriptableData = yaml.safe_load(UnityStreamNoTags)
+print(loadedScriptableData)
 print("")
-#print(hoge["MonoBehaviour"]["MayaSceneName"])
-hoge["MonoBehaviour"]["MayaSceneName"] = curFileName
+#print(loadedScriptableData["MonoBehaviour"]["MayaSceneName"])
+loadedScriptableData["MonoBehaviour"]["MayaSceneName"] = curFileName
 
 selList = mc.ls(sl=True)
 
@@ -66,10 +75,10 @@ for sel in selList:
     tmpObjectData["ObjectTranslate"] = objTranslate
     tmpObjectData["ObjectRotate"]    = objRotate
     tmpObjectData["ObjectScale"]     = objScale
-    hoge["MonoBehaviour"]["ObjectDataArray"].append(tmpObjectData)
+    loadedScriptableData["MonoBehaviour"]["ObjectDataArray"].append(tmpObjectData)
     
-print(hoge["MonoBehaviour"]["ObjectDataArray"])
-# hoge["MonoBehaviour"]["ObjectDataArray"] = [
+print(loadedScriptableData["MonoBehaviour"]["ObjectDataArray"])
+# loadedScriptableData["MonoBehaviour"]["ObjectDataArray"] = [
 #     {
 #         "ObjectName" : "sub1",
 #         "SubValue" : 12
@@ -79,8 +88,8 @@ print(hoge["MonoBehaviour"]["ObjectDataArray"])
 #         "SubValue" : 37
 #     }]
 
-#print(hoge)
+#print(loadedScriptableData)
 
 with open(exportScriptableObjectPath, "w") as wf:
     wf.write(UnityStreamHeader)
-    yaml.dump(hoge, wf)
+    yaml.dump(loadedScriptableData, wf)

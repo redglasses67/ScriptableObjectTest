@@ -21,20 +21,22 @@ os.chdir("..")
 # このスクリプトファイルの１つ上のディレクトリのパスを取得
 parentFolderPath = os.getcwd()
 
-exportUnityPath = op.join(parentFolderPath, "Assets")
-sampleFilePath  = op.join(exportUnityPath, "TestScriptableObject_Sample.asset")
+loadSceneDir      = op.join(op.join(parentFolderPath, "Assets"), "Scenes")
+loadSceneFilePath = op.join(loadSceneDir, "readingTest.unity")
 
-unityStreamHeader, unityStreamContent = uyu.readScriptableObjectContent(sampleFilePath)
+unityStreamHeader, unityStreamContent = uyu.readScriptableObjectContent(loadSceneFilePath)
 
 print("unityStreamHeader ============================================")
 print(unityStreamHeader)
 print("==============================================================")
 
 print("unityStreamContent ============================================")
-print(unityStreamContent)
+#print(unityStreamContent)
+for objID, objData in unityStreamContent.items():
+    print(objID, objData)
 print("==============================================================")
 
-# exportScriptableObjectPath = op.join(exportUnityPath, "TestScriptableObject_" + curFileName + ".asset")
+# exportScriptableObjectPath = op.join(loadSceneDir, "readingTest.unity")
 
 # loadedScriptableData = yaml.safe_load(unityStreamContent)
 

@@ -3,7 +3,6 @@
 import maya.cmds as mc
 import os
 import os.path as op
-import yaml
 
 import UnityYamlUtility as uyu
 
@@ -24,7 +23,7 @@ parentFolderPath = os.getcwd()
 exportUnityPath = op.join(parentFolderPath, "Assets")
 sampleFilePath  = op.join(exportUnityPath, "TestScriptableObject_Sample.asset")
 
-unityStreamHeader, unityStreamContent = uyu.readScriptableObjectContent(sampleFilePath)
+unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(sampleFilePath)
 
 print("unityStreamHeader ============================================")
 print(unityStreamHeader)

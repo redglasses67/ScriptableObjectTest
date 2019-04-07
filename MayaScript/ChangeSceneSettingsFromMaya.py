@@ -1,16 +1,10 @@
 ﻿# -*- coding: utf-8 -*-
 
-import maya.cmds as mc
 import os
 import os.path as op
+import random
 import yaml
-
 import UnityYamlUtility as uyu
-
-curFileFullPath = mc.file(q=True, sceneName=True)
-
-# op.basename だけだと拡張子も入っているので、op.splitext で名前と拡張子に分ける
-curFileName, _  = op.splitext(op.basename(curFileFullPath))
 
 thisFilePath = op.dirname(__file__)
 
@@ -20,62 +14,35 @@ os.chdir(thisFilePath)
 os.chdir("..")
 # このスクリプトファイルの１つ上のディレクトリのパスを取得
 parentFolderPath = os.getcwd()
+# print("parentFolderPath", parentFolderPath)
 
 loadSceneDir      = op.join(op.join(parentFolderPath, "Assets"), "Scenes")
-loadSceneFilePath = op.join(loadSceneDir, "readingTest.unity")
+loadSceneFilePath = op.join(loadSceneDir, "ReadingTest.unity")
 
-unityStreamHeader, unityStreamContent = uyu.readScriptableObjectContent(loadSceneFilePath)
+unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
+
+print("YAML 3 ", uyu.YAML_Class_ID_Dict[3])
+uyu.showComponents(unityStreamContent)
 
 print("unityStreamHeader ============================================")
 print(unityStreamHeader)
 print("==============================================================")
 
 print("unityStreamContent ============================================")
-#print(unityStreamContent)
-for objID, objData in unityStreamContent.items():
-    print(objID, objData)
+# print(unityStreamContent)
+for objectID, objectData in unityStreamContent.items():
+    print(objectID)
+    # print(objectData)
+    loadedSceneData = yaml.safe_load(objectData)
+    print(loadedSceneData)
+    if "Light" in loadedSceneData:
+        # print("m_Color", loadedSceneData["Light"]["m_Color"])
+        loadedSceneData["Light"]["m_Color"]["r"] = random.random()
+        loadedSceneData["Light"]["m_Color"]["g"] = random.random()
+        loadedSceneData["Light"]["m_Color"]["b"] = random.random()
+
+    unityStreamContent[objectID] = loadedSceneData
 print("==============================================================")
 
-# exportScriptableObjectPath = op.join(loadSceneDir, "readingTest.unity")
-
-# loadedScriptableData = yaml.safe_load(unityStreamContent)
-
-# loadedScriptableData["MonoBehaviour"]["MayaSceneName"] = curFileName
-
-# selList = mc.ls(sl=True)
-
-# tmpObjectDataList = []
-
-# for sel in selList:
-#     objTranslate = mc.getAttr("%s.translate" % sel)[0]
-#     objRotate    = mc.getAttr("%s.rotate" % sel)[0]
-#     objScale     = mc.getAttr("%s.scale" % sel)[0]
-
-#     tmpObjectData                         = {}
-#     tmpObjectData["ObjectName"]           = sel
-
-#     tmpObjectData["ObjectTranslate"]      = {}
-#     tmpObjectData["ObjectTranslate"]["x"] = objTranslate[0]
-#     tmpObjectData["ObjectTranslate"]["y"] = objTranslate[1]
-#     tmpObjectData["ObjectTranslate"]["z"] = objTranslate[2]
-    
-#     tmpObjectData["ObjectRotate"]         = {}
-#     tmpObjectData["ObjectRotate"]["x"]    = objRotate[0]
-#     tmpObjectData["ObjectRotate"]["y"]    = objRotate[1]
-#     tmpObjectData["ObjectRotate"]["z"]    = objRotate[2]
-
-#     tmpObjectData["ObjectScale"]          = {}
-#     tmpObjectData["ObjectScale"]["x"]     = objScale[0]
-#     tmpObjectData["ObjectScale"]["y"]     = objScale[1]
-#     tmpObjectData["ObjectScale"]["z"]     = objScale[2]
-    
-#     tmpObjectDataList.append(tmpObjectData)
-
-# loadedScriptableData["MonoBehaviour"]["ObjectDataArray"] = tmpObjectDataList
-
-# # 書き込みの処理
-# with open(exportScriptableObjectPath, "w") as wfile:
-#     # file.write でまずはヘッダーを書く
-#     wfile.write(unityStreamHeader)
-#     # yaml.dump でMaya側から書き出したい内容を書く
-#     yaml.dump(loadedScriptableData, wfile)
+newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
+uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)

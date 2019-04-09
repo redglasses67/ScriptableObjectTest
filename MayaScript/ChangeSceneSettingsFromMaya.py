@@ -7,6 +7,7 @@ import yaml
 import UnityYamlUtility as uyu
 
 thisFilePath = op.dirname(__file__)
+print("thisFilePath", thisFilePath)
 
 # thisFilePath にディレクトリを移動
 os.chdir(thisFilePath)
@@ -21,28 +22,33 @@ loadSceneFilePath = op.join(loadSceneDir, "ReadingTest.unity")
 
 unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
 
-print("YAML 3 ", uyu.YAML_Class_ID_Dict[3])
-uyu.showComponents(unityStreamContent)
+# print("YAML 3 ", uyu.YAML_Class_ID_Dict[3])
 
-print("unityStreamHeader ============================================")
-print(unityStreamHeader)
-print("==============================================================")
+# componentList =  uyu.getComponentList(unityStreamContent)
+# print("componentList", componentList)
 
-print("unityStreamContent ============================================")
-# print(unityStreamContent)
-for objectID, objectData in unityStreamContent.items():
-    print(objectID)
-    # print(objectData)
-    loadedSceneData = yaml.safe_load(objectData)
-    print(loadedSceneData)
-    if "Light" in loadedSceneData:
-        # print("m_Color", loadedSceneData["Light"]["m_Color"])
-        loadedSceneData["Light"]["m_Color"]["r"] = random.random()
-        loadedSceneData["Light"]["m_Color"]["g"] = random.random()
-        loadedSceneData["Light"]["m_Color"]["b"] = random.random()
+lightPropList = uyu.getPropetyListInComponent(unityStreamContent, "Hoge")
+print("lightPropList", lightPropList)
 
-    unityStreamContent[objectID] = loadedSceneData
-print("==============================================================")
+# print("unityStreamHeader ============================================")
+# print(unityStreamHeader)
+# print("==============================================================")
 
-newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
-uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)
+# print("unityStreamContent ============================================")
+# # print(unityStreamContent)
+# for objectID, objectData in unityStreamContent.items():
+# 	print(objectID)
+# 	# print(objectData)
+# 	loadedSceneData = yaml.safe_load(objectData)
+# 	print(loadedSceneData)
+# 	if "Light" in loadedSceneData:
+# 		# print("m_Color", loadedSceneData["Light"]["m_Color"])
+# 		loadedSceneData["Light"]["m_Color"]["r"] = random.random()
+# 		loadedSceneData["Light"]["m_Color"]["g"] = random.random()
+# 		loadedSceneData["Light"]["m_Color"]["b"] = random.random()
+
+# 	unityStreamContent[objectID] = loadedSceneData
+# print("==============================================================")
+
+# newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
+# uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)

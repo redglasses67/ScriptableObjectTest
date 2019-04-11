@@ -7,7 +7,6 @@ import yaml
 import UnityYamlUtility as uyu
 
 thisFilePath = op.dirname(__file__)
-print("thisFilePath", thisFilePath)
 
 # thisFilePath にディレクトリを移動
 os.chdir(thisFilePath)
@@ -15,40 +14,23 @@ os.chdir(thisFilePath)
 os.chdir("..")
 # このスクリプトファイルの１つ上のディレクトリのパスを取得
 parentFolderPath = os.getcwd()
-# print("parentFolderPath", parentFolderPath)
 
 loadSceneDir      = op.join(op.join(parentFolderPath, "Assets"), "Scenes")
 loadSceneFilePath = op.join(loadSceneDir, "ReadingTest.unity")
 
 unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
 
-# print("YAML 3 ", uyu.YAML_Class_ID_Dict[3])
 
-# componentList =  uyu.getComponentList(unityStreamContent)
-# print("componentList", componentList)
+for objectID, objectData in unityStreamContent.items():
 
-lightPropList = uyu.getPropetyListInComponent(unityStreamContent, "Hoge")
-print("lightPropList", lightPropList)
+	loadedSceneData = yaml.safe_load(objectData)
 
-# print("unityStreamHeader ============================================")
-# print(unityStreamHeader)
-# print("==============================================================")
+	if "Light" in loadedSceneData:
+		loadedSceneData["Light"]["m_Color"]["r"] = random.random()
+		loadedSceneData["Light"]["m_Color"]["g"] = random.random()
+		loadedSceneData["Light"]["m_Color"]["b"] = random.random()
 
-# print("unityStreamContent ============================================")
-# # print(unityStreamContent)
-# for objectID, objectData in unityStreamContent.items():
-# 	print(objectID)
-# 	# print(objectData)
-# 	loadedSceneData = yaml.safe_load(objectData)
-# 	print(loadedSceneData)
-# 	if "Light" in loadedSceneData:
-# 		# print("m_Color", loadedSceneData["Light"]["m_Color"])
-# 		loadedSceneData["Light"]["m_Color"]["r"] = random.random()
-# 		loadedSceneData["Light"]["m_Color"]["g"] = random.random()
-# 		loadedSceneData["Light"]["m_Color"]["b"] = random.random()
+	unityStreamContent[objectID] = loadedSceneData
 
-# 	unityStreamContent[objectID] = loadedSceneData
-# print("==============================================================")
-
-# newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
-# uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)
+newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
+uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)

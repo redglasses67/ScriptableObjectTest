@@ -25,14 +25,6 @@ sampleFilePath  = op.join(exportUnityPath, "TestScriptableObject_Sample.asset")
 
 unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(sampleFilePath)
 
-print("unityStreamHeader ============================================")
-print(unityStreamHeader)
-print("==============================================================")
-
-print("unityStreamContent ============================================")
-print(unityStreamContent)
-print("==============================================================")
-
 exportScriptableObjectPath = op.join(exportUnityPath, "TestScriptableObject_" + curFileName + ".asset")
 
 loadedScriptableData = yaml.safe_load(unityStreamContent)

@@ -82,7 +82,7 @@ def getComponentList(contentsDict):
 	return componentList
 
 
-def getPropetyListInComponent(contentsDict, classType):
+def getPropertiesInComponent(contentsDict, classType):
 	"""
 	contentsDict内にある指定したclassTypeのプロパティリストを取得
 	"""
@@ -103,35 +103,46 @@ def getPropetyListInComponent(contentsDict, classType):
 
 	propDict = loadedData[classType]
 
-	return getDictKeysRecursively("", propDict)
+	return getPropertiesRecursively("", propDict)
 
 
-def getKeyFromValue(dict, value):
+def getKeyFromValue(_dict, value):
 	"""
-	dict内に指定したvalueを持つKeyを検索して取得
+	_dict内に指定したvalueを持つKeyを検索して取得
 	"""
-	keys = [key for key, val in dict.items() if val == value]
+	keys = [key for key, val in _dict.items() if val == value]
 	if len(keys) > 0:
 		return keys[0]
 	return None
 
 
-def getDictKeysRecursively(parentKey, dict):
+def getPropertiesRecursively(parentProp, props):
 	"""
-	指定したdict内のKeyを再帰的取得していく. なんとなくMaya風に|(縦線)で親子階層を表現
+	指定したprops内のKeyを再帰的取得していく. なんとなくMaya風に|(縦線)で親子階層を表現
 	"""
-	keyList = []
-	for key in dict.keys():
-		if isinstance(dict[key], dict):
-			childrenValList = getDictKeysRecursively(str(key), dict[key])
-			keyList.extend(childrenValList)
-		else:
-			keyStr = str(key)
-			if not parentKey == "":
-				keyStr = parentKey + "|" + keyStr
-			keyList.append(keyStr)
+	propList = []
+	for prop in props:
 
-	return keyList
+		propStr = str(prop)
+		if not parentProp == "":
+			propStr = parentProp + "|" + propStr
+		
+		if isinstance(prop, dict):
+			propList.extend( getPropertiesRecursively(parentProp, prop) )
+
+		elif isinstance(prop, list):
+			propList.extend( getPropertiesRecursively(parentProp, prop) )
+
+		elif isinstance(props[prop], dict):
+			propList.extend( getPropertiesRecursively(propStr, props[prop]) )
+
+		elif isinstance(props[prop], list):
+			propList.extend( getPropertiesRecursively(propStr, props[prop]) )
+
+		else:
+			propList.append(propStr)
+
+	return propList
 
 
 YAML_Class_ID_Dict = {

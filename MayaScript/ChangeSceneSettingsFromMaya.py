@@ -6,31 +6,33 @@ import random
 import yaml
 import UnityYamlUtility as uyu
 
-thisFilePath = op.dirname(__file__)
+def main():
+	thisFilePath = op.dirname(__file__)
 
-# thisFilePath にディレクトリを移動
-os.chdir(thisFilePath)
-# １つ上の階層に移動
-os.chdir("..")
-# このスクリプトファイルの１つ上のディレクトリのパスを取得
-parentFolderPath = os.getcwd()
+	# thisFilePath にディレクトリを移動
+	os.chdir(thisFilePath)
+	# １つ上の階層に移動
+	os.chdir("..")
+	# このスクリプトファイルの１つ上のディレクトリのパスを取得
+	parentFolderPath = os.getcwd()
 
-loadSceneDir      = op.join(op.join(parentFolderPath, "Assets"), "Scenes")
-loadSceneFilePath = op.join(loadSceneDir, "ReadingTest.unity")
+	loadSceneDir      = op.join(op.join(parentFolderPath, "Assets"), "Scenes")
+	loadSceneFilePath = op.join(loadSceneDir, "ReadingTest.unity")
 
-unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
+	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
 
+	for objectID, objectData in unityStreamContent.items():
+		loadSceneData = yaml.safe_load(objectData)
 
-for objectID, objectData in unityStreamContent.items():
+		if "Light" in loadSceneData:
+			loadSceneData["Light"]["m_Color"]["r"] = random.random()
+			loadSceneData["Light"]["m_Color"]["g"] = random.random()
+			loadSceneData["Light"]["m_Color"]["b"] = random.random()
 
-	loadedSceneData = yaml.safe_load(objectData)
+		unityStreamContent[objectID] = loadSceneData
 
-	if "Light" in loadedSceneData:
-		loadedSceneData["Light"]["m_Color"]["r"] = random.random()
-		loadedSceneData["Light"]["m_Color"]["g"] = random.random()
-		loadedSceneData["Light"]["m_Color"]["b"] = random.random()
+	newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
+	uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)
 
-	unityStreamContent[objectID] = loadedSceneData
-
-newSceneFilePath = op.join(loadSceneDir, "ReadingTest_new.unity")
-uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, newSceneFilePath)
+if __name__ == "__main__":
+	main()

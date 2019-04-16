@@ -3,7 +3,7 @@
 import os
 import os.path as op
 import random
-import yaml
+import ruamel.yaml as yaml
 import UnityYamlUtility as uyu
 
 def main():
@@ -21,9 +21,12 @@ def main():
 
 	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadMatFilePath)
 
+	# yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+	# 	lambda loader, node: OrderedDict(loader.construct_pairs(node)))
+
 	# m_TexEnvs や m_Floats がリストである点に注意！！！
 	for objectID, objectData in unityStreamContent.items():
-		loadMatData = yaml.safe_load(objectData)
+		loadMatData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
 
 		if "Material" in loadMatData:
 			texEnvsList = loadMatData["Material"]["m_SavedProperties"]["m_TexEnvs"]

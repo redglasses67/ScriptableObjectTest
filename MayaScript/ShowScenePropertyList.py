@@ -3,6 +3,7 @@
 import os
 import os.path as op
 import UnityYamlUtility as uyu
+import ruamel.yaml as yaml
 
 def main():
 	thisFilePath = op.dirname(__file__)
@@ -27,16 +28,28 @@ def main():
 	print("\nunityStreamContent ===========================================")
 	print(unityStreamContent)
 
+	for objectID, objectData in unityStreamContent.items():
+		loadMatData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
+		if "MeshFilter" in loadMatData: 
+			print("MeshFilter", loadMatData["MeshFilter"]["m_Mesh"]) 
 
-	componentList =  uyu.getComponentList(unityStreamContent)
-	print("\ncomponentList ================================================")
-	for component in componentList:
-		print(component)
+	# componentList =  uyu.getComponentList(unityStreamContent)
+	# print("\ncomponentList ================================================")
+	# for component in componentList:
+	# 	print(component)
 
-	lightPropList = uyu.getPropertiesInComponent(unityStreamContent, "Light")
-	print("\nlightPropList ================================================")
-	for lightProp in lightPropList:
-		print(lightProp)
+
+	# lightPropList = uyu.getPropertiesInComponent(unityStreamContent, "Light")
+	# print("\nlightPropList ================================================")
+	# for lightProp in lightPropList:
+	# 	print(lightProp)
+
+	
+	meshFilterPropList = uyu.getPropertiesInComponent(unityStreamContent, "MeshFilter")
+	print("\nmeshFilterPropList ================================================")
+	for meshFilterProp in meshFilterPropList:
+		print(meshFilterProp)
+
 
 if __name__ == "__main__":
 	main()

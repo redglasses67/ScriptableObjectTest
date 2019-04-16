@@ -63,12 +63,7 @@ def main():
 
 	loadedScriptableData["MonoBehaviour"]["ObjectDataArray"] = tmpObjectDataList
 
-	# 書き込みの処理
-	with open(exportScriptableObjectPath, "w") as wfile:
-		# file.write でまずはヘッダーを書く
-		wfile.write(unityStreamHeader)
-		# yaml.dump でMaya側から書き出したい内容を書く
-		yaml.dump(loadedScriptableData, wfile)
+	uyu.writeUnityYamlData(unityStreamHeader, loadedScriptableData, exportScriptableObjectPath)
 
 if __name__ == "__main__":
 	main()

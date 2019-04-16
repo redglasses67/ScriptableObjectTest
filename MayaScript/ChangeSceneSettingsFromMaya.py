@@ -3,7 +3,7 @@
 import os
 import os.path as op
 import random
-import yaml
+import ruamel.yaml as yaml
 import UnityYamlUtility as uyu
 
 def main():
@@ -22,7 +22,7 @@ def main():
 	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
 
 	for objectID, objectData in unityStreamContent.items():
-		loadSceneData = yaml.safe_load(objectData)
+		loadSceneData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
 
 		if "Light" in loadSceneData:
 			loadSceneData["Light"]["m_Color"]["r"] = random.random()

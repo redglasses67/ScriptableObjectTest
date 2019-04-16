@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 import os
 import os.path as op
-import yaml
+import ruamel.yaml as yaml
 from collections import OrderedDict
 
 """
@@ -54,6 +54,7 @@ def writeUnityYamlData(topHeader, contentsDict, filePath):
 	"""
 	topHeader, contentsDictの内容を filePath で指定したファイルに出力する
 	"""
+
 	# 書き込みの処理
 	with open(filePath, "w") as wfile:
 		# file.write でまずはヘッダーを書く
@@ -62,7 +63,7 @@ def writeUnityYamlData(topHeader, contentsDict, filePath):
 		for objectHeader in contentsDict.keys():
 			wfile.write(objectHeader)
 			# yaml.dump でMaya側から書き出したい内容を書く
-			yaml.dump(contentsDict[objectHeader], wfile)
+			yaml.dump(contentsDict[objectHeader], wfile, Dumper=yaml.RoundTripDumper)
 
 
 def getComponent(objectHeader):
@@ -86,7 +87,7 @@ def getComponentList(contentsDict):
 	componentList = []
 
 	for objectHeader in contentsDict.keys():
-		print("classID", objectHeader, getComponent(objectHeader))
+		# print("classID", objectHeader, getComponent(objectHeader))
 		componentList.append(getComponent(objectHeader))
 
 	return componentList
@@ -112,7 +113,11 @@ def getPropertiesInComponent(contentsDict, classType):
 
 	for objectHeader, objectData in contentsDict.items():
 		if "--- !u!%s" % classID in objectHeader:
-			loadData = yaml.safe_load(objectData)
+			if "guid" in objectData:
+				loadData = yaml.load(objectData, Loader=yaml.BaseLoader)
+			else:
+				loadData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
+			
 			break
 
 	propDict = loadData[classType]
@@ -139,7 +144,7 @@ def getPropertiesRecursively(parentProp, props):
 	for prop in props:
 
 		propStr = str(prop)
-
+		print("prop type", prop, type(prop), props[prop], type(props[prop]))
 		if isinstance(prop, dict):
 			propList.extend( getPropertiesRecursively(parentProp, prop) )
 
@@ -202,3 +207,5 @@ def readYamlClassIdList():
 			# print(int(id), classType)
 
 	return classIdDict
+
+

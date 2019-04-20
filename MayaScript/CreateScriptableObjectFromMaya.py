@@ -3,6 +3,7 @@
 import maya.cmds as mc
 import os
 import os.path as op
+import ruamel.yaml as yaml
 
 import UnityYamlUtility as uyu
 
@@ -28,42 +29,50 @@ def main():
 
 	exportScriptableObjectPath = op.join(exportUnityPath, "TestScriptableObject_" + curFileName + ".asset")
 
-	loadedScriptableData = yaml.safe_load(unityStreamContent)
+	for objectID, objectData in unityStreamContent.items():
+		loadScriptableData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
 
-	loadedScriptableData["MonoBehaviour"]["MayaSceneName"] = curFileName
+		if "MonoBehaviour" in loadScriptableData:
+			loadScriptableData["MonoBehaviour"]["MayaSceneName"] = curFileName
 
-	selList = mc.ls(sl=True)
+			selList = mc.ls(sl=True)
 
-	tmpObjectDataList = []
+			tmpObjectDataList = []
 
-	for sel in selList:
-		objTranslate = mc.getAttr("%s.translate" % sel)[0]
-		objRotate    = mc.getAttr("%s.rotate" % sel)[0]
-		objScale     = mc.getAttr("%s.scale" % sel)[0]
+			for sel in selList:
+				objTranslate = mc.getAttr("%s.translate" % sel)[0]
+				objRotate    = mc.getAttr("%s.rotate" % sel)[0]
+				objScale     = mc.getAttr("%s.scale" % sel)[0]
 
-		tmpObjectData                         = {}
-		tmpObjectData["ObjectName"]           = sel
+				tmpObjectData                         = {}
+				tmpObjectData["ObjectName"]           = sel
 
-		tmpObjectData["ObjectTranslate"]      = {}
-		tmpObjectData["ObjectTranslate"]["x"] = objTranslate[0]
-		tmpObjectData["ObjectTranslate"]["y"] = objTranslate[1]
-		tmpObjectData["ObjectTranslate"]["z"] = objTranslate[2]
-		
-		tmpObjectData["ObjectRotate"]         = {}
-		tmpObjectData["ObjectRotate"]["x"]    = objRotate[0]
-		tmpObjectData["ObjectRotate"]["y"]    = objRotate[1]
-		tmpObjectData["ObjectRotate"]["z"]    = objRotate[2]
+				tmpObjectData["ObjectTranslate"]      = {}
+				tmpObjectData["ObjectTranslate"]["x"] = objTranslate[0]
+				tmpObjectData["ObjectTranslate"]["y"] = objTranslate[1]
+				tmpObjectData["ObjectTranslate"]["z"] = objTranslate[2]
+				
+				tmpObjectData["ObjectRotate"]         = {}
+				tmpObjectData["ObjectRotate"]["x"]    = objRotate[0]
+				tmpObjectData["ObjectRotate"]["y"]    = objRotate[1]
+				tmpObjectData["ObjectRotate"]["z"]    = objRotate[2]
 
-		tmpObjectData["ObjectScale"]          = {}
-		tmpObjectData["ObjectScale"]["x"]     = objScale[0]
-		tmpObjectData["ObjectScale"]["y"]     = objScale[1]
-		tmpObjectData["ObjectScale"]["z"]     = objScale[2]
-		
-		tmpObjectDataList.append(tmpObjectData)
+				tmpObjectData["ObjectScale"]          = {}
+				tmpObjectData["ObjectScale"]["x"]     = objScale[0]
+				tmpObjectData["ObjectScale"]["y"]     = objScale[1]
+				tmpObjectData["ObjectScale"]["z"]     = objScale[2]
+				
+				tmpObjectDataList.append(tmpObjectData)
 
-	loadedScriptableData["MonoBehaviour"]["ObjectDataArray"] = tmpObjectDataList
+			loadScriptableData["MonoBehaviour"]["ObjectDataArray"] = tmpObjectDataList
 
-	uyu.writeUnityYamlData(unityStreamHeader, loadedScriptableData, exportScriptableObjectPath)
+		unityStreamContent[objectID] = loadScriptableData
+
+	uyu.writeUnityYamlData(unityStreamHeader, unityStreamContent, exportScriptableObjectPath)
+
+	mc.confirmDialog(
+		title="Unity Scriptable Create Sample",
+		message=u"書き出しが完了しました ! \n%s" % exportScriptableObjectPath)
 
 if __name__ == "__main__":
 	main()

@@ -21,9 +21,6 @@ def main():
 
 	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadMatFilePath)
 
-	# yaml.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-	# 	lambda loader, node: OrderedDict(loader.construct_pairs(node)))
-
 	# m_TexEnvs や m_Floats がリストである点に注意！！！
 	for objectID, objectData in unityStreamContent.items():
 		loadMatData = yaml.load(objectData, Loader=yaml.RoundTripLoader)

@@ -21,20 +21,19 @@ def main():
 
 	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadMatFilePath)
 
-	print("\nunityStreamHeader ============================================")
+	print("\n unityStreamHeader ============================================")
 	print(unityStreamHeader)
 
-	print("\nunityStreamContent ===========================================")
+	print("\n unityStreamContent ===========================================")
 	print(unityStreamContent)
 
-
 	componentList =  uyu.getComponentList(unityStreamContent)
-	print("\ncomponentList ================================================")
+	print("\n componentList ================================================")
 	for component in componentList:
 		print(component)
 
 	matPropList = uyu.getPropertiesInComponent(unityStreamContent, "Material")
-	print("\nmatPropList ==================================================")
+	print("\n matPropList ==================================================")
 	for matProp in matPropList:
 		print(matProp)
 

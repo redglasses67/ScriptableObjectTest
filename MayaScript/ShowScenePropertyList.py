@@ -22,34 +22,31 @@ def main():
 
 	unityStreamHeader, unityStreamContent = uyu.readUnityYamlData(loadSceneFilePath)
 
-	print("\nunityStreamHeader ============================================")
+	print("\n unityStreamHeader ============================================")
 	print(unityStreamHeader)
 
-	print("\nunityStreamContent ===========================================")
+	print("\n unityStreamContent ===========================================")
 	print(unityStreamContent)
+
+	componentList =  uyu.getComponentList(unityStreamContent)
+	print("\n componentList ================================================")
+	for component in componentList:
+		print(component)
 
 	for objectID, objectData in unityStreamContent.items():
 		loadMatData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
 		if "MeshFilter" in loadMatData: 
 			print("MeshFilter", loadMatData["MeshFilter"]["m_Mesh"]) 
 
-	# componentList =  uyu.getComponentList(unityStreamContent)
-	# print("\ncomponentList ================================================")
-	# for component in componentList:
-	# 	print(component)
+	lightPropList = uyu.getPropertiesInComponent(unityStreamContent, "Light")
+	print("\n lightPropList ================================================")
+	for lightProp in lightPropList:
+		print(lightProp)
 
-
-	# lightPropList = uyu.getPropertiesInComponent(unityStreamContent, "Light")
-	# print("\nlightPropList ================================================")
-	# for lightProp in lightPropList:
-	# 	print(lightProp)
-
-	
 	meshFilterPropList = uyu.getPropertiesInComponent(unityStreamContent, "MeshFilter")
-	print("\nmeshFilterPropList ================================================")
+	print("\n meshFilterPropList ================================================")
 	for meshFilterProp in meshFilterPropList:
 		print(meshFilterProp)
-
 
 if __name__ == "__main__":
 	main()

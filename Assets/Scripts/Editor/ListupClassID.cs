@@ -46,8 +46,8 @@ public class ListUpClassID
 
 	public static string GetClassName (int classId)
 	{
-		var assembly = Assembly.GetAssembly(typeof(MonoScript));
-		var unityType = assembly.GetType("UnityEditor.UnityType");
+		var assembly    = Assembly.GetAssembly(typeof(MonoScript));
+		var unityType   = assembly.GetType("UnityEditor.UnityType");
 		var classObject = unityType.InvokeMember(
 							"FindTypeByPersistentTypeID",
 							BindingFlags.InvokeMethod,

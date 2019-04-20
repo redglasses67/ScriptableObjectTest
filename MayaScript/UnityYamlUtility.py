@@ -113,11 +113,7 @@ def getPropertiesInComponent(contentsDict, classType):
 
 	for objectHeader, objectData in contentsDict.items():
 		if "--- !u!%s" % classID in objectHeader:
-			if "guid" in objectData:
-				loadData = yaml.load(objectData, Loader=yaml.BaseLoader)
-			else:
-				loadData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
-			
+			loadData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
 			break
 
 	propDict = loadData[classType]
@@ -142,9 +138,8 @@ def getPropertiesRecursively(parentProp, props):
 	"""
 	propList = []
 	for prop in props:
-
 		propStr = str(prop)
-		print("prop type", prop, type(prop), props[prop], type(props[prop]))
+		# print("prop type", prop, type(prop), props[prop], type(props[prop]))
 		if isinstance(prop, dict):
 			propList.extend( getPropertiesRecursively(parentProp, prop) )
 
@@ -163,7 +158,7 @@ def getPropertiesRecursively(parentProp, props):
 
 		else:
 			if not parentProp == "":
-				propStr = parentProp + " | " + propStr
+				propStr = parentProp + " | " + propStr + " | " + str(props[prop])
 			propList.append(propStr)
 
 	return propList

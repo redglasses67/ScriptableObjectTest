@@ -20,9 +20,6 @@ https://docs.unity3d.com/ja/current/Manual/ClassIDReference.html
 Python - Pythonの複雑にネストされた辞書の全てのKeyへのアクセス｜teratail
 https://teratail.com/questions/16535
 
-dictionary - In Python, how can you load YAML mappings as OrderedDicts? - Stack Overflow
-https://stackoverflow.com/questions/5121931/in-python-how-can-you-load-yaml-mappings-as-ordereddicts
-
 """
 
 def readUnityYamlData(filePath):

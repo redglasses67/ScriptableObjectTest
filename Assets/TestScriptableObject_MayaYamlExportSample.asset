@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30cfb80facb48f47ae8be5284764ab5, type: 3}
+  m_Name: TestScriptableObject_Sample
+  m_EditorClassIdentifier:
+  MayaSceneName: MayaYamlExportSample
+  ObjectDataArray:
+  - ObjectRotate:
+      y: 44.343334574962164
+      x: -156.622724928795
+      z: -148.50921220633145
+    ObjectTranslate:
+      y: -2.885707129291745
+      x: 9.400658744743563
+      z: 4.534098115424254
+    ObjectScale:
+      y: 1.0
+      x: 1.0
+      z: 1.0
+    ObjectName: pCylinder1
+  - ObjectRotate:
+      y: 47.85067721686167
+      x: -191.2322387389006
+      z: -160.46560396330247
+    ObjectTranslate:
+      y: 1.6628155392551491
+      x: 7.845065190108049
+      z: -2.0755258913882244
+    ObjectScale:
+      y: 1.2000000000000002
+      x: 1.2000000000000002
+      z: 1.2000000000000002
+    ObjectName: pSphere1
+  - ObjectRotate:
+      y: 46.51265976846052
+      x: 140.52000232249864
+      z: 164.71789589274098
+    ObjectTranslate:
+      y: 3.229606575608928
+      x: 2.0748212854814083
+      z: 1.5438410462961336
+    ObjectScale:
+      y: 1.5
+      x: 1.5
+      z: 1.5
+    ObjectName: pCube1

@@ -136,7 +136,7 @@ def getPropertiesRecursively(parentProp, props):
 	propList = []
 	for prop in props:
 		propStr = str(prop)
-		# print("prop type", prop, type(prop), props[prop], type(props[prop]))
+		print("prop type", prop, type(prop), props[prop], type(props[prop]))
 		if isinstance(prop, dict):
 			propList.extend( getPropertiesRecursively(parentProp, prop) )
 
@@ -178,7 +178,10 @@ def readYamlClassIdList():
 	loadYamlClassIdListPath = op.join(parentFolderPath, "YAML_ClassID_List.txt")
 
 	if not op.exists(loadYamlClassIdListPath):
-		print("YAML_ClassID_List.txt is not found... Please create it in Unity")
+		mc.error("YAML_ClassID_List.txt is not found... Please create it in Unity")
+		mc.confirmDialog(
+			title="kkUnityYamlUtility Error",
+			message=u"YAML_ClassID_List.txt が見つかりませんでした。\nUnity側で生成して下さい。")
 		return None
 
 	classIdDict = OrderedDict()

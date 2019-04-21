@@ -34,9 +34,9 @@ def main():
 		print(component)
 
 	for objectID, objectData in unityStreamContent.items():
-		loadMatData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
-		if "MeshFilter" in loadMatData: 
-			print("MeshFilter", loadMatData["MeshFilter"]["m_Mesh"]) 
+		loadSceneData = yaml.load(objectData, Loader=yaml.RoundTripLoader)
+		if "MeshFilter" in loadSceneData: 
+			print("MeshFilter", loadSceneData["MeshFilter"]["m_Mesh"])
 
 	lightPropList = uyu.getPropertiesInComponent(unityStreamContent, "Light")
 	print("\n lightPropList ================================================")
@@ -47,6 +47,11 @@ def main():
 	print("\n meshFilterPropList ================================================")
 	for meshFilterProp in meshFilterPropList:
 		print(meshFilterProp)
+
+	renderSettingsPropList = uyu.getPropertiesInComponent(unityStreamContent, "RenderSettings")
+	print("\n renderSettingsPropList ================================================")
+	for renderSettingsProp in renderSettingsPropList:
+		print(renderSettingsProp)
 
 if __name__ == "__main__":
 	main()

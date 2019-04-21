@@ -4,7 +4,7 @@ import os
 import os.path as op
 import random
 import ruamel.yaml as yaml
-import UnityYamlUtility as uyu
+import kkUnityYamlUtility as uyu
 
 def main():
 	thisFilePath = op.dirname(__file__)

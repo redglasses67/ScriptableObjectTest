@@ -2,7 +2,7 @@
 
 import os
 import os.path as op
-import UnityYamlUtility as uyu
+import kkUnityYamlUtility as uyu
 
 def main():
 	thisFilePath = op.dirname(__file__)

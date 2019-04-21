@@ -4,8 +4,7 @@ import maya.cmds as mc
 import os
 import os.path as op
 import ruamel.yaml as yaml
-
-import UnityYamlUtility as uyu
+import kkUnityYamlUtility as uyu
 
 def main():
 	curFileFullPath = mc.file(q=True, sceneName=True)
